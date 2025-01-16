@@ -20,7 +20,11 @@ const Navbar = ({}: Props) => {
             <p className='text-slate-950 text-sm'>Chittagong</p>
           </div>
           <div>
-            <SearchBox value={""} onChange={undefined} onSubmit={undefined} />
+            <SearchBox
+              value={"null"}
+              onChange={undefined}
+              onSubmit={undefined}
+            />
           </div>
         </div>
       </div>
