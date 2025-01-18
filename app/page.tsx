@@ -6,6 +6,12 @@ import { kelvinToCelsius } from "@/utils/kelvinToCelsius";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { format, parseISO } from "date-fns";
+import dynamic from "next/dynamic";
+import { useEffect, useState } from "react";
+
+const WeatherIcons = dynamic(() => import("@/components/WeatherIcons"), {
+  ssr: false,
+});
 
 type WeatherData = {
   cod: string;
@@ -71,6 +77,11 @@ export default function Home() {
     },
   });
   const firstData = data?.list[0];
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   if (isLoading)
     return (
@@ -78,6 +89,14 @@ export default function Home() {
         <p className='animate-bounce'>Loading...</p>
       </div>
     );
+
+  if (error)
+    return (
+      <div className='flex items-center min-h-screen justify-center'>
+        <p>Error loading data</p>
+      </div>
+    );
+
   return (
     <div className='flex flex-col gap-4 bg-gray-100 min-h-screen'>
       <Navbar />
@@ -86,7 +105,7 @@ export default function Home() {
           <h2 className='flex gap-1 text-2xl items-end'>
             <p>{format(parseISO(firstData?.dt_txt ?? ""), "EEEE")}</p>
             <p className='text-lg'>
-              ({format(parseISO(firstData?.dt_txt ?? ""), "dd.mm.yyyy")})
+              ({format(parseISO(firstData?.dt_txt ?? ""), "dd.MM.yyyy")})
             </p>
           </h2>
           <Container className='gap-10 px-6 items-center'>
@@ -101,7 +120,12 @@ export default function Home() {
             </div>
           </Container>
         </section>
-        <section>Hello</section>
+        <section className='flex gap-10 sm:gap-16 overflow-x-auto w-full justify-between pr-3'>
+          {isClient &&
+            data?.list.map((item, index) => (
+              <WeatherIcons key={index} iconName={item.weather[0].icon} />
+            ))}
+        </section>
       </main>
     </div>
   );
