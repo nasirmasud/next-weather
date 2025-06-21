@@ -12,6 +12,7 @@ type Props = {
 export default function WeatherIcons(
   props: React.HTMLProps<HTMLDivElement> & Props
 ) {
+  const { iconName, ...rest } = props;
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
@@ -19,14 +20,14 @@ export default function WeatherIcons(
   }, []);
 
   return (
-    <div {...props} className={cn("relative h-20 w-20")}>
+    <div {...rest} className={cn("relative h-20 w-20")}>
       {isClient && (
         <Image
           width={100}
           height={100}
           alt='weather-icon'
           className='absolute h-full w-full'
-          src={`https://openweathermap.org/img/wn/${props.iconName}@2x.png`}
+          src={`https://openweathermap.org/img/wn/${iconName}@2x.png`}
         />
       )}
     </div>
