@@ -120,7 +120,7 @@ export default function Home() {
             </div>
           </Container>
         </section>
-        <section className='flex gap-10 sm:gap-16 overflow-x-auto w-full justify-between pr-3'>
+        <section className='flex gap-10 sm:gap-16 overflow-x-hidden w-full justify-between pr-3'>
           {isClient &&
             data?.list.map((item, index) => (
               <WeatherIcons key={index} iconName={item.weather[0].icon} />
