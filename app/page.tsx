@@ -1,12 +1,16 @@
 "use client";
 
 import Container from "@/components/Container";
+import ForecastInDetail from "@/components/ForecastInDetail";
 import Navbar from "@/components/Navbar";
+import WeatherDetails from "@/components/WeatherDetails";
 import getIconByDayNight from "@/utils/getIconByDayNight";
 import { kelvinToCelsius } from "@/utils/kelvinToCelsius";
+import meterToKm from "@/utils/meterToKm";
+import { windSpeedCon } from "@/utils/windSpeedCon";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { format, parseISO } from "date-fns";
+import { format, fromUnixTime, parseISO } from "date-fns";
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 
@@ -152,10 +156,58 @@ export default function Home() {
               </div>
             </Container>
           </div>
-          <div className='flex gap-4'></div>
+          <div className='flex gap-4'>
+            {/* Left */}
+            <Container className='w-fit justify-center flex-col px-4 items-center'>
+              <p className='capitalize text-center'>
+                {firstData?.weather[0].description}
+              </p>
+              <WeatherIcons
+                iconName={getIconByDayNight(
+                  firstData?.weather[0].icon ?? "",
+                  firstData?.dt_txt ?? ""
+                )}
+              />
+            </Container>
+            {/* Right */}
+            <Container className='bg-orange-400/70 px-6 gap-4 justify-between overflow-x-auto'>
+              <WeatherDetails
+                visibility={meterToKm(firstData?.visibility ?? 1000)}
+                airPressure={`${firstData?.main.pressure ?? 0} hPa`}
+                humidity={`${firstData?.main.humidity ?? 0}%`}
+                windSpeed={windSpeedCon(firstData?.wind.speed ?? 1.64)}
+                sunrise={`${format(
+                  fromUnixTime(data?.city.sunrise ?? 1702949452),
+                  "h:mm a"
+                )}`}
+                sunset={`${format(
+                  fromUnixTime(data?.city.sunset ?? 1702988252),
+                  "h:mm a"
+                )}`}
+              />
+            </Container>
+          </div>
         </section>
 
-        <section className='flex'></section>
+        {/* 7 Days Forecast */}
+        <section className='flex'>
+          <ForecastInDetail
+            weatherIcon={""}
+            date={""}
+            day={""}
+            temp={0}
+            feelsLike={0}
+            minTemp={0}
+            maxTemp={0}
+            description={""}
+            visibility={""}
+            humidity={""}
+            windSpeed={""}
+            airPressure={""}
+            sunrise={""}
+            sunset={""}
+          />
+        </section>
       </main>
     </div>
   );
