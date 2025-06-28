@@ -135,7 +135,7 @@ export default function Home() {
                   </span>
                 </p>
               </div>
-              <div className='flex gap-10 sm:gap-16 overflow-x-auto w-full justify-between pr-3'>
+              <div className='flex gap-10 sm:gap-16 overflow-x-auto w-full justify-between pr-3 pb-2'>
                 {isClient &&
                   data?.list.map((data, index) => (
                     <div
