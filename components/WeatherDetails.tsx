@@ -1,12 +1,7 @@
 import React from "react";
-import {
-  FiBarChart,
-  FiDroplet,
-  FiSunrise,
-  FiSunset,
-  FiWind,
-} from "react-icons/fi";
+import { FiDroplet, FiSunrise, FiSunset, FiWind } from "react-icons/fi";
 import { LuEye } from "react-icons/lu";
+import { WiBarometer } from "react-icons/wi";
 
 export interface WeatherDetailsProps {
   visibility: string;
@@ -45,7 +40,7 @@ export default function WeatherDetails(props: WeatherDetailsProps) {
       />
       <SingleWeatherDetails
         information='Air Pressure'
-        icon={<FiBarChart className='text-slate-800' />}
+        icon={<WiBarometer className='text-slate-800' />}
         value={airPressure}
       />
       <SingleWeatherDetails
