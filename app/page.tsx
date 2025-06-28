@@ -78,6 +78,7 @@ export default function Home() {
       const { data } = await axios.get(
         `https://api.openweathermap.org/data/2.5/forecast?q=dhaka&appid=${process.env.NEXT_PUBLIC_WEATHER_KEY}&cnt=56`
       );
+      console.log(data);
       return data;
     },
   });
@@ -190,7 +191,8 @@ export default function Home() {
         </section>
 
         {/* 7 Days Forecast */}
-        <section className='flex'>
+        <section className='flex w-full flex-col gap-4'>
+          <p className='text-2xl'>Forecast (7 Days)</p>
           <ForecastInDetail
             weatherIcon={""}
             date={""}
