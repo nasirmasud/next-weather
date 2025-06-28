@@ -16,21 +16,21 @@ export interface ForecastInDetailProps extends WeatherDetailsProps {
 
 export default function ForecastInDetail(props: ForecastInDetailProps) {
   const {
-    weatherIcon = "02d",
+    weatherIcon = "10n",
     date = "19.09",
     day = "Tuesday",
-    temp = 25,
-    feelsLike = 23,
-    minTemp = 20,
-    maxTemp = 30,
-    description = "Partly cloudy",
+    temp,
+    feelsLike,
+    minTemp,
+    maxTemp,
+    description,
   } = props;
   return (
     <Container className='gap-4'>
       {/* Left Section */}
       <section className='flex gap-4 items-center px-4'>
         <div>
-          <WeatherIcons iconName={weatherIcon} />
+          <WeatherIcons iconName={weatherIcon || "01d"} />
           <p>{date}</p>
           <p className='text-sm'>{day}</p>
         </div>{" "}
