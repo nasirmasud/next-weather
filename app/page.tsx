@@ -85,6 +85,22 @@ export default function Home() {
   const firstData = data?.list[0];
   const [isClient, setIsClient] = useState(false);
 
+  const uniqueDates = [
+    ...new Set(
+      data?.list.map(
+        (item) => new Date(item.dt * 1000).toISOString().split("T")[0]
+      )
+    ),
+  ];
+
+  const firstData4EachDate = uniqueDates.map((date) => {
+    return data?.list.find((entry) => {
+      const entryDate = new Date(entry.dt * 1000).toISOString().split("T")[0];
+      const entryTime = new Date(entry.dt * 1000).getHours();
+      return entryDate === date && entryTime >= 6; // Get the data from 6:00 AM to 6:00 PM of each day
+    });
+  });
+
   useEffect(() => {
     setIsClient(true);
   }, []);
@@ -193,22 +209,25 @@ export default function Home() {
         {/* 7 Days Forecast */}
         <section className='flex w-full flex-col gap-4'>
           <p className='text-2xl'>Forecast (7 Days)</p>
-          <ForecastInDetail
-            weatherIcon={""}
-            date={""}
-            day={""}
-            temp={0}
-            feelsLike={0}
-            minTemp={0}
-            maxTemp={0}
-            description={""}
-            visibility={""}
-            humidity={""}
-            windSpeed={""}
-            airPressure={""}
-            sunrise={""}
-            sunset={""}
-          />
+          {firstData4EachDate.map((entry, index) => (
+            <ForecastInDetail
+              key={index}
+              description={entry?.weather[0].description ?? ""}
+              weatherIcon={entry?.weather[0].icon ?? "10n"}
+              date={format(parseISO(entry?.dt_txt ?? ""), "dd.MM")}
+              day={format(parseISO(entry?.dt_txt ?? ""), "EEEE")}
+              feelsLike={entry?.main.feels_like ?? 0}
+              temp={entry?.main.temp ?? 0}
+              minTemp={entry?.main.temp_min ?? 0}
+              maxTemp={entry?.main.temp_max ?? 0}
+              airPressure={`${entry?.main.pressure ?? 0} hPa`}
+              humidity={`${entry?.main.humidity ?? 0}%`}
+              visibility={meterToKm(entry?.visibility ?? 1000)}
+              windSpeed={windSpeedCon(entry?.wind.speed ?? 1.64)}
+              sunrise={format(fromUnixTime(data?.city.sunrise ?? 0), "h:mm a")}
+              sunset={format(fromUnixTime(data?.city.sunset ?? 0), "h:mm a")}
+            />
+          ))}
         </section>
       </main>
     </div>
