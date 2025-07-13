@@ -9,26 +9,35 @@ import SearchBox from "./SearchBox";
 
 interface Props {}
 
-const handleChange = () => {};
-const handleSubmit = () => {};
-
 const Navbar = ({}: Props) => {
   const [city, setCity] = useState<string>("");
   const [error, setError] = useState<string>("");
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [showSuggestions, setShowSuggestions] = useState<boolean>(false);
 
+  const handleChange = () => {};
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (suggestions.length === 0) {
+      setError("Location not found. Please try again.");
+    } else {
+      setError("");
+      setShowSuggestions(false);
+    }
+  };
+
   async function handleInputChange(value: string) {
     setCity(value);
     if (value.length >= 3) {
       try {
         const response = await axios.get(
-          `https://api.openweathermap.org/data/2.5/forecast?q=${value}&appid=${process.env.NEXT_PUBLIC_WEATHER_KEY}&cnt=56`
+          `https://api.openweathermap.org/geo/1.0/direct?q=${value}&limit=5&appid=${process.env.NEXT_PUBLIC_WEATHER_KEY}`
         );
-        setSuggestions(response.data.map((item: any) => item.name));
+        const suggestions = response.data.map((item: any) => item.name);
+        setSuggestions(suggestions);
         setError("");
         setShowSuggestions(true);
-      } catch {
+      } catch (error) {
         setSuggestions([]);
         setShowSuggestions(false);
       }
@@ -57,7 +66,15 @@ const Navbar = ({}: Props) => {
               onChange={(e) => handleInputChange(e.target.value)}
               onSubmit={handleSubmit}
             />
-            <SuggestionBox />
+            <SuggestionBox
+              showSuggestions={showSuggestions}
+              suggestions={suggestions}
+              handleSuggestionClick={function (item: string): void {
+                setCity(item);
+                setShowSuggestions(false);
+              }}
+              error={error}
+            />
           </div>
         </div>
       </div>
@@ -77,18 +94,24 @@ function SuggestionBox({
   error: string;
 }) {
   return (
-    <ul className='mb-4 bg-white absolute border top-[44px] left-0 border-green-400 rounded-md min-w-[200px] flex flex-col gap-1 py-2 px-2'>
-      {showSuggestions &&
-        suggestions.map((item) => (
-          <li
-            key={item}
-            className='cursor-pointer p-1 rounded hover:bg-green-200'
-            onClick={() => handleSuggestionClick(item)}
-          >
-            {item}
-          </li>
-        ))}
-    </ul>
+    <>
+      {((showSuggestions && suggestions.length > 1) || error) && (
+        <ul className='mb-4 bg-white absolute border top-[40px] left-0 border-green-400 rounded-md min-w-[250px] flex flex-col gap-1 py-2 px-2'>
+          {error && suggestions.length < 1 && (
+            <li className='text-red-500 p-1'>{error}</li>
+          )}
+          {suggestions.map((item, index) => (
+            <li
+              key={index}
+              onClick={() => handleSuggestionClick(item)}
+              className='cursor-pointer p-1 rounded hover:bg-green-200'
+            >
+              {item}
+            </li>
+          ))}
+        </ul>
+      )}
+    </>
   );
 }
 
