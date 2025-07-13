@@ -214,8 +214,12 @@ export default function Home() {
               key={index}
               description={entry?.weather[0].description ?? ""}
               weatherIcon={entry?.weather[0].icon ?? "10n"}
-              date={format(parseISO(entry?.dt_txt ?? ""), "dd.MM")}
-              day={format(parseISO(entry?.dt_txt ?? ""), "EEEE")}
+              date={
+                entry?.dt_txt ? format(parseISO(entry.dt_txt), "dd.MM") : "--"
+              }
+              day={
+                entry?.dt_txt ? format(parseISO(entry.dt_txt), "EEEE") : "--"
+              }
               feelsLike={entry?.main.feels_like ?? 0}
               temp={entry?.main.temp ?? 0}
               minTemp={entry?.main.temp_min ?? 0}
