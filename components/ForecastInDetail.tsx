@@ -4,14 +4,14 @@ import WeatherDetails, { WeatherDetailsProps } from "./WeatherDetails";
 import WeatherIcons from "./WeatherIcons";
 
 export interface ForecastInDetailProps extends WeatherDetailsProps {
-  weatherIcon: string;
-  date: string;
   day: string;
   temp: number;
   feelsLike: number;
   minTemp: number;
   maxTemp: number;
   description: string;
+  weatherIcon: string;
+  date: string;
 }
 
 export default function ForecastInDetail(props: ForecastInDetailProps) {
@@ -21,8 +21,6 @@ export default function ForecastInDetail(props: ForecastInDetailProps) {
     day = "Tuesday",
     temp = 300.15,
     feelsLike = 300.15,
-    minTemp = 300.15,
-    maxTemp = 300.15,
     description = "Clear sky",
   } = props;
   return (
