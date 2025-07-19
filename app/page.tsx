@@ -75,8 +75,8 @@ type WeatherData = {
 };
 
 export default function Home() {
-  const [place, setPlace] = useAtom(placeAtom);
-  const [loadingCity, setLoadingCity] = useAtom(loadingCityAtom);
+  const [place] = useAtom(placeAtom);
+  const [loadingCity] = useAtom(loadingCityAtom);
 
   const { isLoading, error, data, refetch } = useQuery<WeatherData>({
     queryKey: ["repoData"],
