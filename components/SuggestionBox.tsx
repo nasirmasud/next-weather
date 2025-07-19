@@ -7,7 +7,7 @@ const SuggestionBox = ({
   showSuggestions: boolean;
   suggestions: string[];
   handleSuggestionClick: (item: string) => void;
-  error: string;
+  error?: string; // <-- make optional
 }) => {
   return (
     <>
